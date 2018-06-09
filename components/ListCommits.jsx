@@ -6,7 +6,6 @@ import Masonry from 'react-masonry-component';
  
 const masonryOptions = {
     transitionDuration: 0,
-    enableResizableChildren: true,
     gutter: 20
 };
 
@@ -34,15 +33,6 @@ function sanitizeData(commit) {
 class ListCommits extends Component {
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            masonryInstance: null
-        }
-    }
-
-    accessMasonry(c) {
-        this.setState({
-            masonryInstance: c
-        })
     }
 
     render() {
@@ -50,10 +40,10 @@ class ListCommits extends Component {
         return (
             <div>
                 <Masonry
-                    options={masonryOptions} // default {}
-                    updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
+                    enableResizableChildren={true}
+                    updateOnEachComponentUpdate={true}
+                    options={masonryOptions}
                     style={masonryStyle}
-                    ref={c => this.accessMasonry(c)}
                 >
                     {commits.map((commit, index) => <Item key={index} commit={sanitizeData(commit)} />)}
                 </Masonry>

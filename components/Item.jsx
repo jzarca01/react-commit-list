@@ -22,12 +22,14 @@ export default class Item extends Component {
         const { height, expanded } = this.state;
 
         this.setState({
-            height: height === '100' ? '500' : '100',
+            height: height === '100' ? 'auto' : '100',
             expanded: !expanded
         });
-
-        this.props.masonry.initializeResizableChildren()
     };
+
+    shouldComponentUpdate() {
+        return true
+    }
 
     render() {
         const { author, commit } = this.props.commit
@@ -51,7 +53,7 @@ export default class Item extends Component {
                         height={ this.state.height }
                     >
                         <p>
-                            {commit.message}
+                            {this.state.expanded ? commit.message : `${commit.message.slice(0, 500)}...`}
                         </p>
                     </AnimateHeight>
                 </CardContent>
@@ -78,8 +80,8 @@ export default class Item extends Component {
 const styles = {
     card: {
         width: 300,
-        maxHeight: 700,
         paddingBottom: 20,
+        marginBottom: 20,
         flex: '1'
     },
     media: {
