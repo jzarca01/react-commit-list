@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import AnimateHeight from 'react-animate-height';
 
@@ -11,10 +11,10 @@ import IconButton from '@material-ui/core/IconButton';
 import LaunchIcon from '@material-ui/icons/Launch';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-export default class Item extends Component {
+class Item extends Component {
 
     state = { 
-        height: '100',
+        height: 100,
         expanded: false 
     };
 
@@ -22,7 +22,7 @@ export default class Item extends Component {
         const { height, expanded } = this.state;
 
         this.setState({
-            height: height === '100' ? 'auto' : '100',
+            height: height === 100 ? 'auto' : 100,
             expanded: !expanded
         });
     };
@@ -98,3 +98,9 @@ const styles = {
         display: 'flex'
     }
 };
+
+Item.propTypes = {
+    commit: PropTypes.object.isRequired
+};
+
+export default Item

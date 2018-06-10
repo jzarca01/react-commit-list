@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { DebounceInput } from 'react-debounce-input';
+import SearchBar from 'material-ui-search-bar'
+
 
 class FilterComponent extends Component {
     constructor(props, context) {
@@ -9,11 +10,16 @@ class FilterComponent extends Component {
     render() {
         const { onChange } = this.props
         return (
-            <div><h2>Search by login</h2>
-                <DebounceInput
-                    debounceTimeout={300}
-                    onChange={e => onChange(e.target.value)} />
- 
+            <div>
+                <SearchBar
+                    hintText={"Search by login"}
+                    onChange={value => onChange(value)}
+                    onRequestSearch={value => onChange(value)}
+                    style={{
+                        margin: '0 auto',
+                        maxWidth: 800
+                    }}
+                />
             </div>
         );
     }

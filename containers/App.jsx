@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   render() {
-    const { commits, actions, isLoading, isError } = this.props;
+    const { commits, actions, isLoading, isError, filter } = this.props;
     return (
       <div>
         <MuiThemeProvider>
@@ -31,7 +31,7 @@ class App extends Component {
             <div className="actualBody" style={defaultStyle}>
               {isLoading && <CircularProgress />}
               {isError && <ErrorComponent />}
-              {commits.length > 0 && <ListCommits commits={commits} />}
+              {commits.length > 0 && <ListCommits commits={commits} actions={actions} filter={filter} />}
             </div>
           </div>
         </MuiThemeProvider>
@@ -42,7 +42,8 @@ class App extends Component {
 
 App.propTypes = {
   commits: PropTypes.array.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
+  filter: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

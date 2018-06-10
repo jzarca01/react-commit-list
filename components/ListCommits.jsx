@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import idx from 'idx';
 import Item from './Item';
+import FilterComponent from './Filter';
 
 import Masonry from 'react-masonry-component';
  
@@ -10,42 +10,41 @@ const masonryOptions = {
 };
 
 const masonryStyle = {
-    margin: 20
+    margin: 20,
+    display: 'flex', 
+    justifyContent: 'center'
 }
 
-function sanitizeData(commit) {
-    return {
-      "author": {
-        "login": idx(commit, _ => _.author.login),
-        "profile_url": idx(commit, _ => _.author.html_url),
-        "image": idx(commit, _ => _.author.avatar_url),
-        "name": idx(commit, _ => _.commit.author.name),
-        "email": idx(commit, _ => _.commit.author.email)
-      },
-      "commit": {
-        "date": commit.commit.author.date,
-        "message": commit.commit.message,
-        "url": commit.commit.url
-      }
+function treatFilter(filter, commits) {
+    if(Object.keys(filter).length === 0 && filter.constructor === Object)
+        return commits
+    else if(filter.type === 'name') {
+        return commits.filter(commit => commit.author.login ? commit.author.login.toLowerCase().includes(filter.searchTerm.toLowerCase()) : false)
     }
-  }
+}
 
 class ListCommits extends Component {
     constructor(props, context) {
         super(props, context);
+        this.handleChange = this.handleChange.bind(this)
+    }
+
+    handleChange(valueToSearch) {
+        return valueToSearch.length ?  this.props.actions.filterByName(valueToSearch) : this.props.actions.resetFilter()
     }
 
     render() {
-        const { commits } = this.props
+        const { commits, filter } = this.props
+
         return (
             <div>
+                <FilterComponent onChange={this.handleChange}/>
                 <Masonry
                     enableResizableChildren={true}
-                    updateOnEachComponentUpdate={true}
                     options={masonryOptions}
                     style={masonryStyle}
                 >
-                    {commits.map((commit, index) => <Item key={index} commit={sanitizeData(commit)} />)}
+                    {treatFilter(filter, commits).map((commit, index) => <Item key={index} commit={commit} />)}
                 </Masonry>
             </div>
         );
@@ -53,7 +52,9 @@ class ListCommits extends Component {
 }
 
 ListCommits.propTypes = {
-  commits: PropTypes.array.isRequired
+  commits: PropTypes.array.isRequired,
+  filter: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 export default ListCommits;

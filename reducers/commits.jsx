@@ -1,9 +1,10 @@
-import { FETCH_COMMITS, DATA_LOADED, FETCH_ERROR } from '../constants/ActionTypes';
+import { FETCH_COMMITS, DATA_LOADED, FETCH_ERROR, FILTER_NAME, FILTER_DATE, RESET_FILTER } from '../constants/ActionTypes';
 
 const initialState = {
   commits: [],
   isLoading: false,
-  isError: false
+  isError: false,
+  filter: {}
 };
 
 export default function commits(state = initialState, action) {
@@ -26,6 +27,27 @@ export default function commits(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 isError: true
+            }
+        case FILTER_NAME:
+            return {
+                ...state,
+                filter: {
+                    type: 'name',
+                    searchTerm: action.searchTerm
+                }
+            }
+        case FILTER_DATE:
+            return {
+                ...state,
+                filter: {
+                    type: 'date',
+                    searchTerm: action.searchTerm
+                }
+            }
+        case RESET_FILTER:
+            return {
+                ...state,
+                filter: {}
             }
         default:
             return state;
